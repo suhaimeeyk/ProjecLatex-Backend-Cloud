@@ -843,13 +843,16 @@ app.put('/Editdb_data2', jsonParser, function (req, res, next) {
 //         }
 //     );
 // })
+
+
+
 app.get('/manuredisplay/:users_id', (req, res) => {
     let users_id = req.params.users_id;
 
     if (!users_id) {
         return res.status(400).send({ error: true, message: "Please provide  users_id" });
     } else {
-        connection.query("SELECT m.db_manure_date,m.manure_total,c.customer_name,c.customer_id,m.manure_id FROM db_manure as m INNER JOIN db_customer as c ON m.users_id = c.customer_id WHERE db_users_id = ?", users_id, (error, results, fields) => {
+        connection.query("SELECT m.db_manure_date,m.manure_total,c.customer_name,c.customer_id,m.manure_id FROM db_manure as m INNER JOIN db_customer as c ON m.users_id = c.customer_id INNER JOIN db_users as u ON u.users_id = c.db_users_id WHERE c.db_users_id = ?", users_id, (error, results, fields) => {
             if (error) throw error;
 
             let message = "";
@@ -1153,6 +1156,85 @@ app.post('/editreveal', jsonParser, function (req, res, next) {
     );
 
 })
+
+//DashBoard
+
+app.get('/manuredisplayALL', jsonParser, function (req, res, next) {
+
+    connection.query(
+        'SELECT m.db_manure_date, m.manure_total as ผลรวมค่าปุ๋ย, c.customer_name as ชื่อ, u.users_name as ชื่อผู้ดูแล , md.manure_sumtotal as ค่าหลังจ่าย , md.manure_pay as ค่าที่จ่าย FROM db_manure as m INNER JOIN db_customer as c ON m.users_id = c.customer_id INNER JOIN db_users as u ON u.users_id =  c.db_users_id INNER JOIN db_manure_detail as md ON md.manure_id =  m.manure_id GROUP BY m.db_manure_date, m.manure_total, c.customer_name, u.users_name, md.manure_sumtotal , md.manure_pay ORDER BY m.db_manure_date DESC;',
+        function (err, results, fields) {
+            let status = "Ok";
+            if (err) {
+                res.json({ status: 'error', message: err })
+                return
+            }
+            
+            // res.json({ results })
+            return res.send({ error: false ,status: status, data: results })
+            
+        }
+    );
+})
+
+app.get('/db_dataALL', jsonParser, function (req, res, next) {
+
+    connection.query(
+        'SELECT * FROM db_data,db_customer,db_catwithdraw,db_users where db_catwithdraw.catwithdraw_id=db_data.cat_id and data_usersid=db_customer.customer_id and db_users_id=db_users.users_id;',
+        function (err, results, fields) {
+            let status = "Ok";
+            if (err) {
+                res.json({ status: 'error', message: err })
+                return
+            }
+            
+            // res.json({ results })
+            return res.send({ error: false ,status: status, data: results })
+            
+        }
+    );
+})
+
+
+app.get('/revealdisplayALL', jsonParser, function (req, res, next) {
+
+    connection.query(
+        'SELECT m.db_reveal_date, m.reveal_total as ผลรวมค่ารายการเบิก, c.customer_name as ชื่อ, u.users_name as ชื่อผู้ดูแล , md.reveal_sumtotal as ค่าหลังจ่าย , md.reveal_pay as ค่าที่จ่าย FROM db_reveal as m INNER JOIN db_customer as c ON m.users_id = c.customer_id INNER JOIN db_users as u ON u.users_id =  c.db_users_id INNER JOIN db_reveal_detail as md ON md.reveal_id =  m.reveal_id GROUP BY m.db_reveal_date, m.reveal_total, c.customer_name, u.users_name, md.reveal_sumtotal , md.reveal_pay ORDER BY m.db_reveal_date DESC',
+        function (err, results, fields) {
+            let status = "Ok";
+            if (err) {
+                res.json({ status: 'error', message: err })
+                return
+            }
+            
+            // res.json({ results })
+            return res.send({ error: false ,status: status, data: results })
+            
+        }
+    );
+})
+
+
+app.get('/Profit', jsonParser, function (req, res, next) {
+
+    connection.query(
+        'SELECT m.db_reveal_date, m.reveal_total as ผลรวมค่ารายการเบิก, c.customer_name as ชื่อ, u.users_name as ชื่อผู้ดูแล , md.reveal_sumtotal as ค่าหลังจ่าย , md.reveal_pay as ค่าที่จ่าย FROM db_reveal as m INNER JOIN db_customer as c ON m.users_id = c.customer_id INNER JOIN db_users as u ON u.users_id =  c.db_users_id INNER JOIN db_reveal_detail as md ON md.reveal_id =  m.reveal_id GROUP BY m.db_reveal_date, m.reveal_total, c.customer_name, u.users_name, md.reveal_sumtotal , md.reveal_pay ORDER BY m.db_reveal_date DESC',
+        function (err, results, fields) {
+            let status = "Ok";
+            if (err) {
+                res.json({ status: 'error', message: err })
+                return
+            }
+            
+            // res.json({ results })
+            return res.send({ error: false ,status: status, data: results })
+            
+        }
+    );
+})
+
+
+
 
 
 app.listen(3333, function () {
