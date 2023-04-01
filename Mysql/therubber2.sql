@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:8889
--- Generation Time: Mar 21, 2023 at 07:41 PM
+-- Generation Time: Mar 29, 2023 at 08:57 AM
 -- Server version: 5.7.39
 -- PHP Version: 7.4.33
 
@@ -116,7 +116,32 @@ INSERT INTO `db_data` (`data_id`, `data_date`, `data_usersid`, `cat_id`, `data_t
 (15, '2023-02-22 08:51:24', 7, 2, 600, 30, 570, 0, 131.1, 20, 2622, 1180, 1442, 3),
 (16, '2023-02-22 08:51:15', 7, 2, 400, 50, 350, 0, 87.5, 30, 2625, 1313, 1313, 2),
 (17, '2023-02-22 08:57:32', 2, 2, 600, 30, 570, 0, 123.4, 20, 2468, 0, 0, 0),
-(18, '2023-02-23 08:20:33', 8, 2, 450, 50, 400, 0, 92, 20, 1840, 1840, 1840, 1);
+(18, '2023-02-23 08:20:33', 8, 2, 450, 50, 400, 0, 92, 20, 1840, 1840, 1840, 1),
+(19, '2023-03-28 16:39:00', 8, 2, 1500, 500, 1000, 0, 270, 40, 10800, 0, 0, 0);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `db_income`
+--
+
+CREATE TABLE `db_income` (
+  `db_income_id` int(11) NOT NULL,
+  `Datedb_income` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `Manuredb_income` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `Revealdb_income` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `pay_for_all_latex_db_income` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `total_price` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `note` varchar(255) COLLATE utf8_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Dumping data for table `db_income`
+--
+
+INSERT INTO `db_income` (`db_income_id`, `Datedb_income`, `Manuredb_income`, `Revealdb_income`, `pay_for_all_latex_db_income`, `total_price`, `note`) VALUES
+(6, '2023-03-28 16:08:40', '200', '2200', '400', '2800', 'ผลร่วมรายรับวันที่ 21/03/2023'),
+(9, '2023-03-28 16:44:40', '300', '350', '20000', '20650', 'ผลร่วมรายรับวันที่ 28/03/2023	');
 
 -- --------------------------------------------------------
 
@@ -155,12 +180,8 @@ CREATE TABLE `db_manure` (
 --
 
 INSERT INTO `db_manure` (`manure_id`, `users_id`, `manure_total`, `db_manure_date`) VALUES
-(1, 1, 15000, '2023-02-16 07:29:09'),
-(2, 2, 15300, '2023-02-21 17:32:12'),
-(7, 7, 5000, '2023-02-17 04:16:13'),
-(9, 7, 9000, '2023-02-19 12:55:56'),
-(10, 8, 4000, '2023-02-25 08:30:02'),
-(11, 1, 2000, '2023-02-22 17:32:12');
+(2, 2, 15300, '2023-02-20 17:32:12'),
+(14, 7, 500, '2023-03-28 16:06:54');
 
 -- --------------------------------------------------------
 
@@ -197,7 +218,34 @@ INSERT INTO `db_manure_detail` (`manure_id`, `manure_detail_date`, `manure_sumto
 (9, '2023-02-19 12:56:04', '6000', '3000', '9000'),
 (1, '2023-02-22 03:20:14', '14000', '300', '15000'),
 (10, '2023-02-25 08:30:24', '3700', '300', '4000'),
-(11, '2023-03-20 17:34:21', '1800', '200', '2000');
+(11, '2023-03-20 17:34:21', '1800', '200', '2000'),
+(12, '2023-03-28 15:59:31', 'ยอดทั้งหมด - ยอดที่จ่าย', '200', '500'),
+(14, '2023-03-28 16:06:59', '400', '100', '500');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `db_paydaily`
+--
+
+CREATE TABLE `db_paydaily` (
+  `paydaily_id` int(11) NOT NULL,
+  `DateProfit` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `ManureProfit` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `RevealProfit` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `pay_for_all_latex_Profit` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `pay_subordinates_wages` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `total_price` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `note` varchar(255) COLLATE utf8_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Dumping data for table `db_paydaily`
+--
+
+INSERT INTO `db_paydaily` (`paydaily_id`, `DateProfit`, `ManureProfit`, `RevealProfit`, `pay_for_all_latex_Profit`, `pay_subordinates_wages`, `total_price`, `note`) VALUES
+(5, '2023-03-28 16:08:04', '15300', '0', '0', '300', '15600', 'ผลร่วมรายจ่ายวันที่ 21/02/2023'),
+(8, '2023-03-28 16:43:32', '500', '600', '10800', '500', '12400', 'ผลร่วมรายการจ่ายวันที่ 28/03/2023');
 
 -- --------------------------------------------------------
 
@@ -233,6 +281,29 @@ INSERT INTO `db_pricerubbers` (`pricerubbers_id`, `date_create`, `percent`, `pri
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `db_profittoday`
+--
+
+CREATE TABLE `db_profittoday` (
+  `profittoday_id` int(11) NOT NULL,
+  `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `paydaily` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `income` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `totalprofittoday` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `note` varchar(255) COLLATE utf8_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Dumping data for table `db_profittoday`
+--
+
+INSERT INTO `db_profittoday` (`profittoday_id`, `date`, `paydaily`, `income`, `totalprofittoday`, `note`) VALUES
+(5, '2023-03-28 16:09:09', '15600', '2800', '-12800', 'กำไรวันที่ 21/02/2023'),
+(8, '2023-03-28 16:45:05', '12400', '20650', '8250', 'กำไรวันที่ 28/03/2023	');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `db_reveal`
 --
 
@@ -248,9 +319,7 @@ CREATE TABLE `db_reveal` (
 --
 
 INSERT INTO `db_reveal` (`reveal_id`, `users_id`, `reveal_total`, `db_reveal_date`) VALUES
-(4, 7, 3000, '2023-02-19 13:18:05'),
-(7, 1, 6000, '2023-02-21 17:32:12'),
-(8, 8, 6000, '2023-02-22 18:30:40');
+(11, 7, 600, '2023-03-28 16:07:11');
 
 -- --------------------------------------------------------
 
@@ -274,7 +343,9 @@ INSERT INTO `db_reveal_detail` (`reveal_id`, `reveal_detail_date`, `reveal_sumto
 (4, '2023-02-19 13:35:48', '2800', '200', '3000'),
 (7, '2023-02-21 01:33:10', '4000', '2000', '6000'),
 (4, '2023-02-21 07:00:16', '2600', '200', '3000'),
-(8, '2023-02-22 18:30:59', '2000', '4000', '6000');
+(8, '2023-02-22 18:30:59', '2000', '4000', '6000'),
+(10, '2023-03-28 16:02:28', '150', '50', '200'),
+(11, '2023-03-28 16:07:17', '300', '300', '600');
 
 -- --------------------------------------------------------
 
@@ -330,16 +401,34 @@ ALTER TABLE `db_data`
   ADD PRIMARY KEY (`data_id`);
 
 --
+-- Indexes for table `db_income`
+--
+ALTER TABLE `db_income`
+  ADD PRIMARY KEY (`db_income_id`);
+
+--
 -- Indexes for table `db_manure`
 --
 ALTER TABLE `db_manure`
   ADD PRIMARY KEY (`manure_id`);
 
 --
+-- Indexes for table `db_paydaily`
+--
+ALTER TABLE `db_paydaily`
+  ADD PRIMARY KEY (`paydaily_id`);
+
+--
 -- Indexes for table `db_pricerubbers`
 --
 ALTER TABLE `db_pricerubbers`
   ADD PRIMARY KEY (`pricerubbers_id`);
+
+--
+-- Indexes for table `db_profittoday`
+--
+ALTER TABLE `db_profittoday`
+  ADD PRIMARY KEY (`profittoday_id`);
 
 --
 -- Indexes for table `db_reveal`
@@ -379,13 +468,25 @@ ALTER TABLE `db_customer`
 -- AUTO_INCREMENT for table `db_data`
 --
 ALTER TABLE `db_data`
-  MODIFY `data_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `data_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+
+--
+-- AUTO_INCREMENT for table `db_income`
+--
+ALTER TABLE `db_income`
+  MODIFY `db_income_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `db_manure`
 --
 ALTER TABLE `db_manure`
-  MODIFY `manure_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `manure_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+
+--
+-- AUTO_INCREMENT for table `db_paydaily`
+--
+ALTER TABLE `db_paydaily`
+  MODIFY `paydaily_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `db_pricerubbers`
@@ -394,10 +495,16 @@ ALTER TABLE `db_pricerubbers`
   MODIFY `pricerubbers_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
+-- AUTO_INCREMENT for table `db_profittoday`
+--
+ALTER TABLE `db_profittoday`
+  MODIFY `profittoday_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
+--
 -- AUTO_INCREMENT for table `db_reveal`
 --
 ALTER TABLE `db_reveal`
-  MODIFY `reveal_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `reveal_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `db_users`
