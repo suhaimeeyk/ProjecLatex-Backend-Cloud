@@ -61,6 +61,30 @@ app.post('/login', jsonParser, function (req, res, next) {
 
 })
 
+app.post('/loginCostomer', jsonParser, function (req, res, next) {
+    connection.execute(
+        'SELECT * FROM db_customer WHERE customer_name=? AND customer_tel=?',
+        [req.body.customer_name, req.body.customer_tel],
+        function (err, users, fields) {
+            if (err) {
+                res.json({ status: 'error', message: err });
+                return;
+            }
+            if (users.length == 0) {
+                res.json({ status: 'error', message: 'no user found' });
+                return;
+            }
+            if (req.body.users_password === users[0].users_password) {
+                var token = jwt.sign({ customer_name: users[0].customer_name, customer_id: users[0].customer_id }, secret, { expiresIn: '1h' });
+                res.json({ status: 'ok', message: 'Login success', level: users[0].level, token });
+            } else {
+                res.json({ status: 'error', message: 'Login failed' });
+            }
+        }
+    );
+});
+
+
 
 app.post('/authen', jsonParser, function (req, res, next) {
 
@@ -77,6 +101,7 @@ app.post('/authen', jsonParser, function (req, res, next) {
 
 
 })
+
 
 
 
@@ -129,6 +154,27 @@ app.get('/EditUser/:users_id', (req, res) => {
         })
     }
 })
+app.get('/EditUserCon/:users_id', (req, res) => {
+    let users_id = req.params.users_id;
+
+    if (!users_id) {
+        return res.status(400).send({ error: true, message: "Please provide  users_id" });
+    } else {
+        connection.query("SELECT * FROM db_customer WHERE customer_id = ?", users_id, (error, results, fields) => {
+            if (error) throw error;
+
+            let message = "";
+            let status = "Ok";
+            if (results === undefined || results.length == 0) {
+                message = "Book not found";
+            } else {
+                message = "Successfully data";
+            }
+
+            return res.send({ status: status, data: results[0], message: message })
+        })
+    }
+})
 
 
 app.put('/EditUser', jsonParser, function (req, res, next) {
@@ -137,6 +183,27 @@ app.put('/EditUser', jsonParser, function (req, res, next) {
         connection.query(
             ' UPDATE db_users SET users_usersname = ?, users_password = ?, users_name = ?, users_tel = ? , level = ? WHERE users_id = ?',
             [req.body.users_usersname, hash, req.body.users_name, req.body.users_tel, req.body.level, req.body.users_id],
+            function (err, results, fields) {
+                let status = "Ok";
+                let message = "";
+                if (results.changedRows === 0) {
+                    message = "Book not found or data are same";
+                } else {
+                    message = "successfully updated";
+                }
+
+                return res.send({ status: status, error: false, data: results, message: message })
+
+            }
+        );
+    });
+})
+app.put('/EditUserCon', jsonParser, function (req, res, next) {
+    bcrypt.hash(req.body.users_password, saltRounds, function (err, hash) {
+
+        connection.query(
+            'UPDATE db_customer SET customer_name = ?, customer_tel = ?, catcustomer_id = ?, db_users_id = ? WHERE customer_id = ?',
+            [req.body.customer_name, req.body.customer_tel, req.body.catcustomer_id, req.body.db_users_id, req.body.customer_id],
             function (err, results, fields) {
                 let status = "Ok";
                 let message = "";
@@ -680,6 +747,27 @@ app.get('/db_data/:users_id', (req, res) => {
         })
     }
 })
+app.get('/db_dataCostomer/:users_id', (req, res) => {
+    let db_users_id = req.params.users_id;
+
+    if (!db_users_id) {
+        return res.status(400).send({ error: true, message: "Please provide  db_users_id" });
+    } else {
+        connection.query("SELECT * FROM db_data,db_customer,db_catwithdraw where db_catwithdraw.catwithdraw_id=db_data.cat_id and data_usersid=db_customer.customer_id  and db_customer.customer_id= ? ", db_users_id, (error, results, fields) => {
+            if (error) throw error;
+
+            let message = "";
+            let status = "Ok";
+            if (results === undefined || results.length == 0) {
+                message = "not found";
+            } else {
+                message = "Successfully data";
+            }
+
+            return res.send({ status: status, data: results, message: message })
+        })
+    }
+})
 
 app.get('/db_dataSelect/:users_id', (req, res) => {
     let db_users_id = req.params.users_id;
@@ -867,6 +955,27 @@ app.get('/manuredisplay/:users_id', (req, res) => {
         })
     }
 })
+app.get('/manuredisplayCostomer/:users_id', (req, res) => {
+    let users_id = req.params.users_id;
+
+    if (!users_id) {
+        return res.status(400).send({ error: true, message: "Please provide  users_id" });
+    } else {
+        connection.query("SELECT m.db_manure_date,m.manure_total,c.customer_name,c.customer_id,m.manure_id FROM db_manure as m INNER JOIN db_customer as c ON m.users_id = c.customer_id WHERE c.customer_id = ?", users_id, (error, results, fields) => {
+            if (error) throw error;
+
+            let message = "";
+            let status = "Ok";
+            if (results === undefined || results.length == 0) {
+                message = "not found";
+            } else {
+                message = "Successfully data";
+            }
+
+            return res.send({ status: status, results: results, message: message })
+        })
+    }
+})
 
 
 app.post('/CreateManuredisplay', jsonParser, function (req, res, next) {
@@ -1033,6 +1142,28 @@ app.get('/RevealdisplayAll/:users_id', (req, res) => {
         })
     }
 })
+app.get('/RevealdisplayAllCos/:users_id', (req, res) => {
+    let users_id = req.params.users_id;
+
+    if (!users_id) {
+        return res.status(400).send({ error: true, message: "Please provide  users_id" });
+    } else {
+        connection.query("SELECT * FROM db_reveal,db_customer where  db_reveal.users_id=db_customer.customer_id and db_customer.customer_id  = ?", users_id, (error, results, fields) => {
+            if (error) throw error;
+
+            let message = "";
+            let status = "Ok";
+            if (results === undefined || results.length == 0) {
+                message = "not found";
+            } else {
+                message = "Successfully data";
+            }
+
+            return res.send({ status: status, results: results, message: message })
+        })
+    }
+})
+
 app.get('/Revealdisplay/:users_id', (req, res) => {
     let users_id = req.params.users_id;
 
@@ -1226,6 +1357,27 @@ app.get('/db_dataALL/:users_id', (req, res) => {
         return res.status(400).send({ error: true, message: "Please provide  users_id" });
     } else {
         connection.query("SELECT * FROM db_data,db_customer,db_catwithdraw,db_users where db_catwithdraw.catwithdraw_id=db_data.cat_id and data_usersid=db_customer.customer_id and db_users_id=db_users.users_id and db_users_id= ? ;", users_id, (error, results, fields) => {
+            if (error) throw error;
+
+            let message = "";
+            let status = "Ok";
+            if (results === undefined || results.length == 0) {
+                message = "not found";
+            } else {
+                message = "Successfully data";
+            }
+
+            return res.send({ status: status, data: results, message: message })
+        })
+    }
+})
+app.get('/db_dataALLcustomer/:users_id', (req, res) => {
+    let users_id = req.params.users_id;
+
+    if (!users_id) {
+        return res.status(400).send({ error: true, message: "Please provide  users_id" });
+    } else {
+        connection.query("SELECT db_data.*, db_customer.*, db_catwithdraw.*, db_manure.*, db_reveal.*, DATE(CONVERT_TZ(db_data.data_date, '+00:00', '-07:00')) AS formatted_date , db_data.data_pricetotal as ราคายางทั้งหมด , db_manure.manure_total as รายการปุ๋ย , db_reveal.reveal_total as รายการเบิก FROM db_data JOIN db_customer ON db_data.data_usersid = db_customer.customer_id JOIN db_catwithdraw ON db_catwithdraw.catwithdraw_id = db_data.cat_id JOIN db_manure ON db_manure.users_id = db_customer.customer_id JOIN db_reveal ON db_reveal.users_id = db_customer.customer_id WHERE db_customer.customer_id = ?", users_id, (error, results, fields) => {
             if (error) throw error;
 
             let message = "";
