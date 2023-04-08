@@ -3,7 +3,6 @@ var cors = require('cors')
 var app = express()
 var bodyParser = require('body-parser')
 var jsonParser = bodyParser.json()
-require('dotenv').config()
 
 const bcrypt = require('bcrypt')
 const saltRounds = 10
@@ -15,16 +14,16 @@ app.use(cors())
 
 const mysql = require('mysql2');
 // create the connection to database
-// const connection = mysql.createConnection({
-//     host: 'localhost',
-//     user: 'root',
-//     password: 'root',
-//     database: 'therubber2',
-//     port: 3306
-// });
+const connection = mysql.createConnection({
+    host: 'localhost',
+    user: 'root',
+    password: 'root',
+    database: 'therubber2',
+    port: 3306
+});
 
-
-const connection = mysql.createConnection(process.env.DATABASE_URL);
+// require('dotenv').config()
+// const connection = mysql.createConnection(process.env.DATABASE_URL)
 
 app.post('/register', jsonParser, function (req, res, next) {
     bcrypt.hash(req.body.users_password, saltRounds, function (err, hash) {
@@ -2066,8 +2065,6 @@ app.get('/db_paydailySelect/:users_id', (req, res) => {
 })
 
 
-
 app.listen(3333, function () {
     console.log('CORS-enabled web server listening on port 3333')
 })
-connection.end()
