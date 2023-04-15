@@ -728,6 +728,7 @@ app.get('/UsersTo/:users_id', (req, res) => {
 //     );
 // })
 
+//ใช้งาน
 app.get('/db_data/:users_id', (req, res) => {
     let db_users_id = req.params.users_id;
 
@@ -749,6 +750,9 @@ app.get('/db_data/:users_id', (req, res) => {
         })
     }
 })
+
+
+
 app.get('/db_dataCostomer/:users_id', (req, res) => {
     let db_users_id = req.params.users_id;
 
