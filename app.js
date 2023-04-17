@@ -2116,7 +2116,7 @@ app.get('/cumulative_tire_price_Customer/:users_id', (req, res) => {
 
 //ยอดลูกค้ารายคน
 
-app.get('/cumulative_tire_price_customer/:customer_id', (req, res) => {
+app.get('/cumulative_tire_price_customer_id/:customer_id', (req, res) => {
     let customer_id = req.params.customer_id;
 
     if (!customer_id) {
