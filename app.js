@@ -2094,11 +2094,12 @@ app.get('/cumulative_tire_price/:users_id', (req, res) => {
 })
 
 //ยอดลูกค้ารายคน
-app.get('/cumulative_tire_price_customer/:users_id', (req, res) => {
-    let db_users_id = req.params.users_id;
 
-    if (!db_users_id) {
-        return res.status(400).send({ error: true, message: "Please provide  db_users_id" });
+app.get('/cumulative_tire_price_customer/:customer_id', (req, res) => {
+    let customer_id = req.params.customer_id;
+
+    if (!customer_id) {
+        return res.status(400).send({ error: true, message: "Please provide  customer_id" });
     } else {
         connection.query("SELECT DATE_FORMAT(data_date, '%d/%m/%Y') AS วันที่ , SUM(data_pricetotal) AS ผลร่วมจ่ายค่าน้ำยางต่อวัน, u.users_name, c.customer_name, c.customer_id FROM db_data AS m INNER JOIN db_customer AS c ON m.data_usersid = c.customer_id INNER JOIN db_users AS u ON u.users_id = c.db_users_id WHERE c.customer_id = ? GROUP BY   DATE_FORMAT(data_date, '%d/%m/%Y'),c.customer_name, c.customer_id;", db_users_id, (error, results, fields) => {
             if (error) throw error;
@@ -2111,11 +2112,10 @@ app.get('/cumulative_tire_price_customer/:users_id', (req, res) => {
                 message = "Successfully data";
             }
 
-            return res.send({ status: status, data: results, message: message })
+            return res.send({ status: status, results: results, message: message })
         })
     }
 })
-
 
 
 app.listen(3333, function () {
