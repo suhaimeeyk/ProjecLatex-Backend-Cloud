@@ -2112,7 +2112,7 @@ app.get('/cumulative_tire_price_customer/:customer_id', (req, res) => {
                 message = "Successfully data";
             }
 
-            return res.send({ status: status, results: results, message: message })
+            return res.send({ status: status, data: results[0], message: message })
         })
     }
 })
