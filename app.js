@@ -1931,7 +1931,7 @@ app.get('/db_incomeSelect/:users_id', (req, res) => {
     if (!users_id) {
         return res.status(400).send({ error: true, message: "Please provide  users_id" });
     } else {
-        connection.query("SELECT DATE_FORMAT(Datedb_income, '%d/%m/%Y') AS วันที่ , total_price , note , u.users_name FROM db_income as m INNER JOIN db_customer as c ON m.users_id = c.customer_id INNER JOIN db_users as u ON u.users_id = c.db_users_id WHERE c.db_users_id = ? ORDER BY Datedb_income ASC;", users_id, (error, results, fields) => {
+        connection.query("SELECT DATE_FORMAT(Datedb_income, '%d/%m/%Y') AS วันที่ , total_price , note , u.users_name FROM db_income as m INNER JOIN db_users as u ON u.users_id = m.users_id WHERE m.users_id = ? ORDER BY Datedb_income ASC;", users_id, (error, results, fields) => {
             if (error) throw error;
 
             let message = "";
@@ -2053,7 +2053,7 @@ app.get('/db_paydailySelect/:users_id', (req, res) => {
     if (!users_id) {
         return res.status(400).send({ error: true, message: "Please provide  users_id" });
     } else {
-        connection.query("SELECT DATE_FORMAT(m.DateProfit, '%d/%m/%Y') AS วันที่ , m.total_price , m.note FROM db_paydaily as m INNER JOIN db_customer as c ON m.users_id = c.customer_id INNER JOIN db_users as u ON u.users_id = c.db_users_id WHERE c.db_users_id = ? ORDER BY DateProfit ASC;", users_id, (error, results, fields) => {
+        connection.query("SELECT DATE_FORMAT(m.DateProfit, '%d/%m/%Y') AS วันที่ , m.total_price , m.note FROM db_paydaily as m INNER JOIN db_users as u ON u.users_id = m.users_id WHERE m.users_id= ? ORDER BY DateProfit ASC;", users_id, (error, results, fields) => {
             if (error) throw error;
 
             let message = "";
