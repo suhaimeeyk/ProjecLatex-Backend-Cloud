@@ -1769,7 +1769,7 @@ app.get('/db_income/:users_id', (req, res) => {
     if (!users_id) {
         return res.status(400).send({ error: true, message: "Please provide  users_id" });
     } else {
-        connection.query("SELECT Datedb_income,note,Manuredb_income,Revealdb_income,pay_for_all_latex_db_income, total_price,db_income_id,u.users_name,c.customer_name FROM db_income as m INNER JOIN db_customer as c ON m.users_id = c.customer_id INNER JOIN db_users as u ON u.users_id = c.db_users_id WHERE c.db_users_id = ?", users_id, (error, results, fields) => {
+        connection.query("SELECT Datedb_income,note,Manuredb_income,Revealdb_income,pay_for_all_latex_db_income, total_price,db_income_id FROM db_income as m INNER JOIN db_users as u ON u.users_id = m.users_id WHERE m.users_id = ?", users_id, (error, results, fields) => {
             if (error) throw error;
 
             let message = "";
