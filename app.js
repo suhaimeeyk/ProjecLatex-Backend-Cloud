@@ -78,8 +78,8 @@ app.post('/loginCostomer', jsonParser, function (req, res, next) {
                 return;
             }
             if (req.body.users_password === users[0].users_password) {
-                var token = jwt.sign({ customer_name: users[0].customer_name, customer_id: users[0].customer_id }, secret, { expiresIn: '1h' });
-                res.json({ status: 'ok', message: 'Login success', level: users[0].level, token });
+                var token = jwt.sign({ customer_name: users[0].customer_name, catcustomer_id: users[0].catcustomer_id }, secret, { expiresIn: '1h' });
+                res.json({ status: 'ok', message: 'Login success', catcustomer_id: users[0].catcustomer_id, token });
             } else {
                 res.json({ status: 'error', message: 'Login failed' });
             }
