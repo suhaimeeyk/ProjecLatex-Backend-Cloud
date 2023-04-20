@@ -1002,6 +1002,22 @@ app.get('/manuredisplayCostomer/:users_id', (req, res) => {
 app.post('/CreateManuredisplay', jsonParser, function (req, res, next) {
 
     connection.execute(
+        'INSERT INTO db_owner(users_id,owner_total) VALUES( ? , ?)',
+        [req.body.users_id, req.body.owner_total],
+        function (err, results, fields) {
+            if (err) {
+                res.json({ status: 'error', message: err })
+                return
+            }
+            res.json({ status: 'Ok' })
+        }
+
+    );
+
+})
+app.post('/CreateOwner', jsonParser, function (req, res, next) {
+
+    connection.execute(
         'INSERT INTO db_manure(users_id,manure_total) VALUES( ? , ?)',
         [req.body.users_id, req.body.manure_total],
         function (err, results, fields) {
@@ -1420,7 +1436,7 @@ app.get('/db_dataALLOwner/:users_id', (req, res) => {
     if (!users_id) {
         return res.status(400).send({ error: true, message: "Please provide  users_id" });
     } else {
-        connection.query("SELECT  u.users_name, c.customer_name  , c.customer_id , m.data_date ,m.data_totalgallon as น้ำหนักรวมทั้งหมด , m.data_wgallon as น้ำหนักแกลลอน, m.data_disgallon as น้ำหนักหักลบแกลลอน , m.data_dryrubber as น้ำยาแห้ง , m.data_price as เปอร์เซ็น  , m.data_pricetotal as  จำนวนเงินทั้งหมด  , c.customer_name as ผู้ตัดยาง , m.data_depositprice as เงินส่วนเจ้าของสวน, m.data_shareprice as เงินส่วนคนตัด FROM db_data AS m INNER JOIN db_customer AS c ON m.data_usersid = c.customer_id INNER JOIN db_users AS u ON u.users_id = c.db_users_id WHERE m.owder_id = ? GROUP BY  c.customer_name, c.customer_id, m.data_date ,m.data_totalgallon, m.data_wgallon, m.data_disgallon , m.data_percent,m.data_dryrubber , m.data_price , m.data_pricetotal ,m.data_shareprice , m.data_depositprice , c.customer_name;", users_id, (error, results, fields) => {
+        connection.query("SELECT  u.users_name, c.customer_name  , c.customer_id , DATE_FORMAT(m.data_date, '%d/%m/%Y') as data_date ,m.data_totalgallon as น้ำหนักรวมทั้งหมด , m.data_wgallon as น้ำหนักแกลลอน, m.data_disgallon as น้ำหนักหักลบแกลลอน , m.data_dryrubber as น้ำยาแห้ง , m.data_price as เปอร์เซ็น  , m.data_pricetotal as  จำนวนเงินทั้งหมด  , c.customer_name as ผู้ตัดยาง , m.data_depositprice as เงินส่วนเจ้าของสวน, m.data_shareprice as เงินส่วนคนตัด FROM db_data AS m INNER JOIN db_customer AS c ON m.data_usersid = c.customer_id INNER JOIN db_users AS u ON u.users_id = c.db_users_id WHERE m.owder_id = ? GROUP BY  c.customer_name, c.customer_id, m.data_date ,m.data_totalgallon, m.data_wgallon, m.data_disgallon , m.data_percent,m.data_dryrubber , m.data_price , m.data_pricetotal ,m.data_shareprice , m.data_depositprice , c.customer_name;", users_id, (error, results, fields) => {
             if (error) throw error;
 
             let message = "";
