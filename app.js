@@ -370,6 +370,20 @@ app.get('/db_catwithdraw', jsonParser, function (req, res, next) {
     );
 })
 
+app.get('/OwnerSelect', jsonParser, function (req, res, next) {
+
+    connection.execute(
+        "SELECT c.customer_id,c.customer_name,cat.catusers_id,cat.catusers_name FROM db_customer as c INNER JOIN db_catusers as cat ON c.catcustomer_id = cat.catusers_id WHERE cat.catusers_id = '1';",
+        function (err, results, fields) {
+            if (err) {
+                res.json({ status: 'error', message: err })
+                return
+            }
+            res.json({ results })
+        }
+    );
+})
+
 app.delete('/db_catwithdraw_id', jsonParser, function (req, res, next) {
 
     connection.execute(
