@@ -1019,6 +1019,29 @@ app.get('/manuredisplayCostomer/:users_id', (req, res) => {
         })
     }
 })
+app.get('/ownerdisplayCostomerOwner/:users_id', (req, res) => {
+    let users_id = req.params.users_id;
+
+    if (!users_id) {
+        return res.status(400).send({ error: true, message: "Please provide  users_id" });
+    } else {
+        connection.query("SELECT c.*,m.* FROM db_owner as m INNER JOIN db_customer as c ON m.users_id = c.customer_id WHERE m.owner_userid = ?", users_id, (error, results, fields) => {
+            if (error) throw error;
+
+            let message = "";
+            let status = "Ok";
+            if (results === undefined || results.length == 0) {
+                message = "not found";
+            } else {
+                message = "Successfully data";
+            }
+
+            return res.send({ status: status, results: results, message: message })
+        })
+    }
+})
+
+
 
 
 
@@ -1042,8 +1065,8 @@ app.post('/CreateManuredisplay', jsonParser, function (req, res, next) {
 app.post('/CreateOwner', jsonParser, function (req, res, next) {
 
     connection.execute(
-        'INSERT INTO db_owner(users_id,owner_total) VALUES( ? , ?)',
-        [req.body.users_id, req.body.owner_total],
+        'INSERT INTO db_owner(users_id,owner_total,owner_userid) VALUES( ? , ? ,?)',
+        [req.body.users_id, req.body.owner_total, req.body.owner_userid],
         function (err, results, fields) {
             if (err) {
                 res.json({ status: 'error', message: err })
