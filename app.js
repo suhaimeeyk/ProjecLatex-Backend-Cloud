@@ -1043,7 +1043,7 @@ app.post('/CreateOwner', jsonParser, function (req, res, next) {
 
     connection.execute(
         'INSERT INTO db_owner(users_id,owner_total) VALUES( ? , ?)',
-        [req.body.users_id, req.body.manure_total],
+        [req.body.users_id, req.body.owner_total],
         function (err, results, fields) {
             if (err) {
                 res.json({ status: 'error', message: err })
