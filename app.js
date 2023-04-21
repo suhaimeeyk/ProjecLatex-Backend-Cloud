@@ -790,6 +790,28 @@ app.get('/db_dataCostomer/:users_id', (req, res) => {
     }
 })
 
+app.get('/db_dataCostomerOwner/:users_id', (req, res) => {
+    let db_users_id = req.params.users_id;
+
+    if (!db_users_id) {
+        return res.status(400).send({ error: true, message: "Please provide  db_users_id" });
+    } else {
+        connection.query("SELECT * FROM db_data,db_customer,db_catwithdraw where db_catwithdraw.catwithdraw_id=db_data.cat_id and data_usersid=db_customer.customer_id  and db_data.owder_id= ?; ", db_users_id, (error, results, fields) => {
+            if (error) throw error;
+
+            let message = "";
+            let status = "Ok";
+            if (results === undefined || results.length == 0) {
+                message = "not found";
+            } else {
+                message = "Successfully data";
+            }
+
+            return res.send({ status: status, data: results, message: message })
+        })
+    }
+})
+
 app.get('/db_dataSelect/:users_id', (req, res) => {
     let db_users_id = req.params.users_id;
 
@@ -997,6 +1019,8 @@ app.get('/manuredisplayCostomer/:users_id', (req, res) => {
         })
     }
 })
+
+
 
 
 app.post('/CreateManuredisplay', jsonParser, function (req, res, next) {
