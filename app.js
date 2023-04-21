@@ -1026,7 +1026,7 @@ app.get('/manuredisplayCostomer/:users_id', (req, res) => {
 app.post('/CreateManuredisplay', jsonParser, function (req, res, next) {
 
     connection.execute(
-        'INSERT INTO db_owner(users_id,owner_total) VALUES( ? , ?)',
+        'INSERT INTO db_manure(users_id,manure_total)',
         [req.body.users_id, req.body.owner_total],
         function (err, results, fields) {
             if (err) {
@@ -1042,7 +1042,7 @@ app.post('/CreateManuredisplay', jsonParser, function (req, res, next) {
 app.post('/CreateOwner', jsonParser, function (req, res, next) {
 
     connection.execute(
-        'INSERT INTO db_manure(users_id,manure_total) VALUES( ? , ?)',
+        'INSERT INTO db_owner(users_id,owner_total) VALUES( ? , ?)',
         [req.body.users_id, req.body.manure_total],
         function (err, results, fields) {
             if (err) {
