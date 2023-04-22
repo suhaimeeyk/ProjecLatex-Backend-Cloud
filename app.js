@@ -1564,7 +1564,7 @@ app.get('/db_dataALLcustomer/:users_id', (req, res) => {
     if (!users_id) {
         return res.status(400).send({ error: true, message: "Please provide  users_id" });
     } else {
-        connection.query("SELECT db_data.*, db_customer.*, db_catwithdraw.*, db_manure.*, db_reveal.*, DATE(CONVERT_TZ(db_data.data_date, '+00:00', '-07:00')) AS formatted_date , db_data.data_pricetotal as ราคายางทั้งหมด , db_manure.manure_total as รายการปุ๋ย , db_reveal.reveal_total as รายการเบิก FROM db_data JOIN db_customer ON db_data.data_usersid = db_customer.customer_id JOIN db_catwithdraw ON db_catwithdraw.catwithdraw_id = db_data.cat_id JOIN db_manure ON db_manure.users_id = db_customer.customer_id JOIN db_reveal ON db_reveal.users_id = db_customer.customer_id WHERE db_customer.customer_id = ?", users_id, (error, results, fields) => {
+        connection.query("SELECT db_data.*, db_customer.*, db_catwithdraw.*, db_manure.*, db_reveal.*, DATE(CONVERT_TZ(db_data.data_date, '+00:00', '-07:00')) AS formatted_date , db_data.data_shareprice as ราคายางทั้งหมด , db_manure.manure_total as รายการปุ๋ย , db_reveal.reveal_total as รายการเบิก FROM db_data JOIN db_customer ON db_data.data_usersid = db_customer.customer_id JOIN db_catwithdraw ON db_catwithdraw.catwithdraw_id = db_data.cat_id JOIN db_manure ON db_manure.users_id = db_customer.customer_id JOIN db_reveal ON db_reveal.users_id = db_customer.customer_id WHERE db_customer.customer_id = ?", users_id, (error, results, fields) => {
             if (error) throw error;
 
             let message = "";
