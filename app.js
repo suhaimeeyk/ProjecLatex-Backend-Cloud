@@ -838,7 +838,7 @@ app.get('/db_dataSelect/:users_id', (req, res) => {
 app.post('/Createdatadisplay', jsonParser, function (req, res, next) {
 
     connection.execute(
-        'INSERT INTO db_data(data_usersid,cat_id,owder_id,data_totalgallon,data_wgallon,data_disgallon,data_dryrubber,data_price,data_pricetotal,data_percent,data_shareprice,data_depositprice , status_id) VALUES( ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ?)',
+        'INSERT INTO db_data(data_usersid,cat_id,owder_id,data_totalgallon,data_wgallon,data_disgallon,data_dryrubber,data_price,data_pricetotal,data_percent,data_shareprice,data_depositprice , status_id) VALUES( ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ? , ?, ?)',
         [req.body.data_usersid, req.body.cat_id, req.body.owder_id, req.body.data_totalgallon, req.body.data_wgallon, req.body.data_disgallon, req.body.data_dryrubber, req.body.data_price, req.body.data_pricetotal, req.body.data_percent, req.body.data_shareprice, req.body.data_shareprice, req.body.status_id],
         function (err, results, fields) {
             if (err) {
