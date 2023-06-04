@@ -750,7 +750,7 @@ app.get('/db_data/:users_id', (req, res) => {
     if (!db_users_id) {
         return res.status(400).send({ error: true, message: "Please provide  db_users_id" });
     } else {
-        connection.query("SELECT * FROM db_data,db_customer,db_catwithdraw,db_users where db_catwithdraw.catwithdraw_id=db_data.cat_id and data_usersid=db_customer.customer_id and db_users_id=db_users.users_id and db_users_id= ? ", db_users_id, (error, results, fields) => {
+        connection.query("SELECT * FROM db_data,db_customer,db_catwithdraw,db_users where db_catwithdraw.catwithdraw_id=db_data.cat_id and data_usersid=db_customer.customer_id and db_users_id=db_users.users_id and db_users_id= ? ORDER BY db_data.data_date DESC;", db_users_id, (error, results, fields) => {
             if (error) throw error;
 
             let message = "";
